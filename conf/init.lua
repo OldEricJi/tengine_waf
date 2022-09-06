@@ -32,6 +32,7 @@ function getClientIp()
 end
 
 function write(logfile,msg)
+    local io = require 'io'
     local fd = io.open(logfile,"ab")
     if fd == nil then return end
     fd:write(msg)
@@ -57,6 +58,7 @@ end
 
 ------------------------------------规则读取函数-------------------------------------------------------------------
 function read_rule(var)
+    local io = require 'io'
     file = io.open(rulepath..'/'..var,"r")
     if file==nil then
         return
