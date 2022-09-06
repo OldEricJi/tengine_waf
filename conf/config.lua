@@ -1,5 +1,5 @@
-RulePath = "/usr/local/tengine/conf/wafconf/"
-logdir = "/usr/local/tengine/logs/"
+RulePath = "/usr/local/openresty/nginx/conf/waf/rule-config/"
+logdir = "/var/log/nginx/waf/"
 black_fileExt={"php","jsp"}
 
 OnlyCheck="off"
