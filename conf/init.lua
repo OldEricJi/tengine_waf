@@ -4,32 +4,31 @@ local ngxmatch=ngx.re.match
 local unescape=ngx.unescape_uri
 local get_headers = ngx.req.get_headers
 local optionIsOn = function (options) return options == "on" and true or false end
+logpath = logdir
+rulepath = RulePath
 UrlDeny = optionIsOn(urlMatch)
 PostCheck = optionIsOn(postMatch)
 CookieCheck = optionIsOn(cookieMatch)
 WhiteCheck = optionIsOn(whiteurlMatch)
 PathInfoFix = optionIsOn(PathInfoFix)
 CCDeny = optionIsOn(denycc)
-whiteipcheck = optionIsOn(whiteipMatch)
-blockipcheck = optionIsOn(blackipMatch)
+WhiteIPCheck = optionIsOn(whiteipMatch)
+BlockIPCheck = optionIsOn(blackipMatch)
 OnlyCheck = optionIsOn(OnlyCheck) 
+AttackLog = optionIsOn(attacklog)
 
 function getClientIp()
-	IP = ngx.var.remote_addr
-	if string.sub(IP,1,7) == "192.168" or string.sub(IP,1,3) == "10." then
-		IPx = ngx.req.get_headers()["X-Forwarded-For"]
-		if IPx ~= nil then
-			if string.match(IPx,'%s') and string.len(IPx)>17 then
-				IP=string.match(string.sub(IPx, -17, -1),'%s(%d+.%d+.%d+.%d+)')
-			else
-				IP=IPx
-			end
-		end
-	end 
-        if IP == nil then
-                IP  = "unknown"
-        end
-        return IP
+    IP = ngx.req.get_headers()["X_real_ip"]
+    if IP == nil then
+        IP = ngx.req.get_headers()["X_Forwarded_For"]
+    end
+    if IP == nil then
+        IP  = ngx.var.remote_addr
+    end
+    if IP == nil then
+        IP  = "unknown"
+    end
+    return IP
 end
 
 function write(logfile,msg)
@@ -39,25 +38,26 @@ function write(logfile,msg)
     fd:flush()
     fd:close()
 end
+
 function log(method,url,data,ruletag)
-	local clientip=ngx.var.remote_addr
-	local xforwardedfor=ngx.req.get_headers()["X-Forwarded-For"]
-	if xforwardedfor == nil then
-		xforwardedfor = "-"
-	end
+    if attacklog then
+        local realIp = getClientIp()
         local ua = ngx.var.http_user_agent
-        if ua == nil then
-		ua = "-"
-	end
-	local servername=ngx.var.host
+        local servername=ngx.var.server_name
         local time=ngx.localtime()
-        local line = clientip..xforwardedfor.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..ua.."\" \""..ruletag.."\"\n"
-        local filename = logdir..'/'..servername.."_"..ngx.today().."_sec.log"
+        if ua  then
+            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..ua.."\" \""..ruletag.."\"\n"
+        else
+            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\" - \""..ruletag.."\"\n"
+        end
+        local filename = logpath..'/'..servername.."_"..ngx.today().."_sec.log"
         write(filename,line)
+    end
 end
+
 ------------------------------------规则读取函数-------------------------------------------------------------------
 function read_rule(var)
-    file = io.open(RulePath..'/'..var,"r")
+    file = io.open(rulepath..'/'..var,"r")
     if file==nil then
         return
     end
@@ -78,7 +78,6 @@ ckrules=read_rule('cookie')
 whiteiprules=read_rule('whiteip')
 blockiprules=read_rule('blockip')
 denyccrules=read_rule('denycc')
-
 
 function say_html()
     if OnlyCheck  then
@@ -102,6 +101,7 @@ function whiteurl()
     end
     return false
 end
+
 function fileExtCheck(ext)
     local items = Set(black_fileExt)
     ext=string.lower(ext)
@@ -115,11 +115,13 @@ function fileExtCheck(ext)
     end
     return false
 end
+
 function Set (list)
   local set = {}
   for _, l in ipairs(list) do set[l] = true end
   return set
 end
+
 function args()
     for _,rule in pairs(argsrules) do
         local args = ngx.req.get_uri_args()
@@ -168,6 +170,7 @@ function ua()
     end
     return false
 end
+
 function body(data)
     for _,rule in pairs(postrules) do
         if rule ~="" and data~="" and ngxmatch(unescape(data),rule,"isjo") then
@@ -178,6 +181,7 @@ function body(data)
     end
     return false
 end
+
 function cookie()
     local ck = ngx.var.http_cookie
     if CookieCheck and ck then
@@ -191,7 +195,6 @@ function cookie()
     end
     return false
 end
-
 
 function gettoken(data)
     if string.match(data,'+.*+') then
@@ -333,7 +336,7 @@ function get_boundary()
 end
 
 function whiteip()
-    if whiteipcheck then
+    if WhiteIPCheck then
     	local clientip=getClientIp()
     	for _,rule in pairs(whiteiprules) do
         	if rule ~="" and ngxmatch(clientip,rule,"isjo") then
@@ -346,7 +349,7 @@ end
 
 
 function blockip()
-    if blockipcheck then
+    if BlockIPCheck then
     	local clientip=getClientIp()
     	for _,rule in pairs(blockiprules) do
         	if rule ~="" and ngxmatch(clientip,rule,"isjo") then
