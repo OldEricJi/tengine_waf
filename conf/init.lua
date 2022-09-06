@@ -9,11 +9,11 @@ rulepath = RulePath
 UrlDeny = optionIsOn(urlMatch)
 PostCheck = optionIsOn(postMatch)
 CookieCheck = optionIsOn(cookieMatch)
-WhiteCheck = optionIsOn(whiteurlMatch)
-PathInfoFix = optionIsOn(PathInfoFix)
-CCDeny = optionIsOn(denycc)
-WhiteIPCheck = optionIsOn(whiteipMatch)
-BlockIPCheck = optionIsOn(blackipMatch)
+WhiteCheck = optionIsOn(whiteUrlMatch)
+
+CCDeny = optionIsOn(denyCC)
+WhiteIPCheck = optionIsOn(whiteIPMatch)
+BlockIPCheck = optionIsOn(blackIPMatch)
 OnlyCheck = optionIsOn(OnlyCheck) 
 AttackLog = optionIsOn(attacklog)
 
