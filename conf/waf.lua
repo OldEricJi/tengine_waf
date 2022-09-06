@@ -6,7 +6,9 @@ if whiteip() then
 elseif blockip() then
 elseif denycc() then
 elseif ngx.var.http_Acunetix_Aspect then
-    say_html()
+    ngx.exit(444)
+elseif ngx.var.http_X_Scan_Memo then
+    ngx.exit(444)
 elseif whiteurl() then
 elseif ua() then
 elseif url() then
@@ -19,7 +21,7 @@ elseif PostCheck then
 	    local len = string.len
             local sock, err = ngx.req.socket()
     	    if not sock then
-					return
+                                return
             end
 	    ngx.req.init_body(128 * 1024)
             sock:settimeout(0)
@@ -68,13 +70,16 @@ elseif PostCheck then
 				return
 			end
 			for key, val in pairs(args) do
-				if type(val) == "table" or val == false then
-					data=table.concat(val, ", ")
+				if type(val) == "table" then
+                                        if type(val[1]) == "boolean" then
+                                                return
+                                        end
+                                        data=table.concat(val, ", ")
 				else
 					data=val
 				end
 				if data and type(data) ~= "boolean" and body(data) then
-                  return true
+                                        body(key)
 				end
 			end
 		end
