@@ -1,9 +1,9 @@
-RulePath = "/usr/local/openresty/nginx/conf/waf/rule-config/"
+RulePath = "/etc/openresty/j-waf/rule-config/"
 logdir = "/var/log/nginx/waf/"
 black_fileExt={"php","jsp"}
 
-OnlyCheck="off"
-AttackLog="on"
+onlyCheck="off"
+attackLog="on"
 urlMatch="on"
 postMatch="on" 
 cookieMatch="on"
