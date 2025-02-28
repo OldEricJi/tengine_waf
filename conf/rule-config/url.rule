@@ -1,7 +1,7 @@
-\.(svn|htaccess|mysql_history|bash_history|git|DS_Store|idea)
-\.(bak|inc|old|mdb|sh|sql|backup|java|class)$
+\.(svn|htaccess|mysql_history|bash_history|git|DS_Store|idea|manager)
+\.(bak|zip|rar|doc|inc|lib|sh|tpl|lbi|dwt|old|cfg|mdb|sql|conf|tar|gz|py|pyc|backup|java|dat|class)$
 (vhost|bbs|host|wwwroot|www|site|root|hytop|web).*\.(rar|xml|zip|tar\.gz|tar)
-(phpmyadmin|jmx-console|jmxinvokerservlet)
+(phpmyadmin|jmx-console|jmxinvokerservlet|config|templates|setting|handlers)
 java\.lang
 CVS/Entries$
-/(attachments|upimg|images|css|uploadfiles|html|uploads|templets|static|template|data|inc|forumdata|upload|includes|cache|avatar)/(\\w+).(php|jsp)
+/(attachments|upimg|images|css|uploadfiles|html|uploads|templets|static|template|data|inc|forumdata|upload|includes|cache|avatar)/(\\w+).(php|jsp|py)
