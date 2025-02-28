@@ -1,1 +1,11 @@
 (HTTrack|Apache-HttpClient|harvest|audit|dirbuster|pangolin|nmap|sqln|-scan|hydra|Parser|libwww|BBBike|sqlmap|w3af|owasp|Nikto|fimap|havij|PycURL|zmeu|BabyKrokodil|netsparker|httperf|bench| SF/)
+# apple GTP 华为蜘蛛 
+(Applebot|GPTBot|ClaudeBot|PetalBot)
+# 采集工具/压力测试/攻击
+(Scrapy|Curl|novel/|HttpClient|okhttp|FeedDemon|ApacheBench|Java|Alexa Toolbar|CrawlDaddy|Indy Library|AskTbFXTV|CoolpadWebkit|Feedly|UniversalFeedParser|Microsoft URL Control|Swiftbot|ZmEu|jaunty|Python-urllib|DigExt|heritrix|Ezooms)
+# 垃圾蜘蛛
+(JikeSpider|oBot|lightDeckReports Bot|YYSpider|EasouSpider|LinkpadBot|SemrushBot|Grapeshot|BLEXBot|MauiBot|Bytespider|CCBot|^$)
+# 营销蜘蛛
+(CriteoBot|DotBot|MJ12bot|AhrefsBot|SemrushBot|proximic)
+# 河南某公司采集
+(Linux; Android 5.0; SM-G900P Build/LRX21T)
